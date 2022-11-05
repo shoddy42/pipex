@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/03 21:08:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/05 18:05:09 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 18:09:22 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,3 +111,18 @@ int	main(int ac, char **av, char **envp)
 		waitpid((pid_t)0, NULL, 0);
 	exit (0);
 }
+
+/*
+
+todo: testing
+
+test UNSET PATH, cmd execution
+cursed infile: cmd 2 should exe
+cursed outfile: cmd 1 should exe
+
+test what if cursed infile and outfile: do middle cmds exe?
+test what if file of name "ls", my guess is check if cmd[0] contains a / to confirm its a literal path.
+
+exit statuses?
+
+*/
