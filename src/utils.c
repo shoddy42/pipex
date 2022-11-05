@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/15 18:18:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/05 17:29:20 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 18:02:19 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,27 @@ void	pipex_open(int ac, char **av, t_ppx *pipex)
 	if (ft_strncmp("here_doc", av[1], 8) == 0)
 	{
 		pipex->outfile_fd = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
-		//change pipex_error to perror and test.
 		if (pipex->outfile_fd < 0)
-			pipex_error("pipex: heredoc", P_ERROR);
+		{
+			perror("pipex: outfile");
+			pipex->cancel_final = true;
+		}
 		pipex_heredoc(av[2], pipex);
 	}
 	else
 	{
 		pipex->infile_fd = open(av[1], O_RDONLY, 0644);
 		if (pipex->infile_fd < 0)
-			pipex_error("pipex: infile", P_ERROR);
+		{
+			perror("pipex: infile");
+			pipex->cancel_first = true;
+		}
 		pipex->outfile_fd = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (pipex->outfile_fd < 0)
-			pipex_error("pipex: outfile", P_ERROR);
+		{
+			perror("pipex: outfile");
+			pipex->cancel_first = true;
+		}
 	}
 }
 

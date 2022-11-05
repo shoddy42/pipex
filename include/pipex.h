@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 20:13:59 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/05 17:19:22 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 18:01:54 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <stdbool.h>
 # include <sys/wait.h>
 # include "libft/libft.h"
 
@@ -24,13 +25,20 @@ typedef struct s_ppx
 	char	**path;
 	char	**envp;
 	pid_t	pid;
-	int		hd_tunnel[2];
+	int		fd_in;
+	int		fd_out;
 	int		old_read;
 	int		cmd_count;
+
+	int		hd_tunnel[2];
 	int		here_doc;
+
 	int		infile_fd;
 	int		outfile_fd;
-	int		cancel_cmd;
+
+	int		exit_status;
+	bool	cancel_first;
+	bool	cancel_final;
 }				t_ppx;
 
 typedef enum e_pipe
@@ -50,12 +58,6 @@ typedef enum e_error
 	P_ERROR,
 	WR_ERROR,
 }	t_error;
-
-typedef enum e_cancel
-{
-	TRUE,
-	FALSE,
-}	t_cancel;
 
 		/* pipex specific functions */
 char	*pipex_pathjoin(char const *path, char const *cmd);

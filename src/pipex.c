@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/03 21:08:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/05 17:28:41 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 18:05:09 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	pipexec(char *cmd, char *envp[], t_ppx *pipex)
 	write(2, "pipex: ", 7);
 	write(2, cmd, ft_strlen(cmd));
 	write(2, ": command not found\n", 20);
-	return(127);
+	exit(127);
 }
 
 int	get_fd_in(int tunnel, t_ppx *pipex, int command_num)
@@ -55,29 +55,36 @@ int	get_fd_out(int tunnel, t_ppx *pipex, int command_num)
 	return (tunnel);
 }
 
+	// if (command_num == pipex->cmd_count)
+	// 	printf ("final cmd!\n");
+
+//todo: TESTING. REMOVING COMMENTS.
 int	forking(char *cmd, t_ppx *pipex, int command_num, int read_tunnel)
 {
 	int		tunnel[2];
-	int		fd_in;
-	int		fd_out;
 
-	pipe(tunnel);
-	fd_in = get_fd_in(read_tunnel, pipex, command_num);
-	fd_out = get_fd_out(tunnel[WRITE], pipex, command_num);
+	if (command_num == 0 && pipex->cancel_first)
+		return (-1);
+	if (command_num == pipex->cmd_count && pipex->cancel_final)
+		return (-1);
+	if (pipe(tunnel) < 0)
+		pipex_error("Creating pipe failed.\n", P_ERROR);
+	pipex->fd_in = get_fd_in(read_tunnel, pipex, command_num);
+	pipex->fd_out = get_fd_out(tunnel[WRITE], pipex, command_num);
 	pipex->pid = fork();
+	if (pipex->pid < 0)
+		pipex_error("Creation of child process failed.\n", P_ERROR);
 	if (pipex->pid == CHILD)
 	{
 		close(tunnel[READ]);
-		dup2(fd_out, STDOUT_FILENO);
-		dup2(fd_in, STDIN_FILENO);
+		dup2(pipex->fd_out, STDOUT_FILENO);
+		dup2(pipex->fd_in, STDIN_FILENO);
 		pipexec(cmd, pipex->envp, pipex);
 	}
-	else
-	{
-		close(tunnel[WRITE]);
-		if (read_tunnel > 1)
-			close(read_tunnel);
-	}
+	//removed else? should be fine? child always exits.
+	close(tunnel[WRITE]);
+	if (read_tunnel > 2)
+		close(read_tunnel);
 	return (tunnel[READ]);
 }
 
@@ -90,6 +97,8 @@ int	main(int ac, char **av, char **envp)
 		pipex_error("Not enough arguments.\n", WR_ERROR);
 	pipex.cmd_count = ac - 3;
 	pipex.envp = envp;
+	pipex.cancel_first = false;
+	pipex.cancel_final = false;
 	split_path(envp, &pipex);
 	pipex_open(ac, av, &pipex);
 	i = 0;
