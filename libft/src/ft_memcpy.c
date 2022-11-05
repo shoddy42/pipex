@@ -6,11 +6,11 @@
 /*   By: wkonings <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/03 22:41:40 by wkonings      #+#    #+#                 */
-/*   Updated: 2019/12/05 16:00:42 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 17:22:05 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {

@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/15 18:18:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/04 19:20:09 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 17:29:20 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,21 @@ char	*pipex_pathjoin(char const *path, char const *cmd)
 	return (ret);
 }
 
+void	pipex_error(char *error_message, int mode)
+{
+	if (mode == WR_ERROR)
+		write (STDERR_FILENO, error_message, ft_strlen(error_message));
+	if (mode == P_ERROR)
+		perror (error_message);
+	exit(1);
+}
+
 void	pipex_open(int ac, char **av, t_ppx *pipex)
 {
 	if (ft_strncmp("here_doc", av[1], 8) == 0)
 	{
 		pipex->outfile_fd = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
+		//change pipex_error to perror and test.
 		if (pipex->outfile_fd < 0)
 			pipex_error("pipex: heredoc", P_ERROR);
 		pipex_heredoc(av[2], pipex);
@@ -61,17 +71,8 @@ int	split_path(char **envp, t_ppx *pipex)
 	i = 0;
 	while (ft_strncmp(envp[i], "PATH=", 5) != 0 && envp[i + 1])
 		i++;
-	if (ft_strncmp(envp[i], "PATH=", 5) != 0)
-		exit (1);
+	// if (ft_strncmp(envp[i], "PATH=", 5) != 0)
+	// 	write(2, "No path!")
 	pipex->path = ft_split(envp[i] + 6, ':');
 	return (0);
-}
-
-void	pipex_error(char *error_message, int mode)
-{
-	if (mode == WR_ERROR)
-		write (STDERR_FILENO, error_message, ft_strlen(error_message));
-	if (mode == P_ERROR)
-		perror (error_message);
-	exit(1);
 }

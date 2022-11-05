@@ -6,7 +6,7 @@
 #    By: wkonings <wkonings@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/10/29 16:21:56 by wkonings      #+#    #+#                  #
-#    Updated: 2022/11/04 22:21:57 by wkonings      ########   odam.nl          #
+#    Updated: 2022/11/05 17:26:34 by wkonings      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,12 +28,12 @@ SRC_DIR		:=	src
 # --------------- FILES -------------------#
 
 HEADERS		:=	$(addprefix $(INCLUDE_DIR)/, pipex.h)
-FILES		:=	pipex utils heredoc ft_funcs1 ft_funcs2 ft_split get_next_line_bonus get_next_line_utils_bonus
+FILES		:=	pipex utils heredoc get_next_line_bonus get_next_line_utils_bonus
 SRCS		:=	$(addprefix $(SRC_DIR)/,$(FILES:%=%.c))
 OBJS		:=	$(addprefix $(OBJS_DIR)/,$(notdir $(SRCS:%.c=%.o)))
 LIB_LIST	:=	$(LIBS_DIR)/libft.a
 LIB_FT		:=	libft
-INC			:= -I include
+INC			:=	-I include
 
 all: $(NAME)
 

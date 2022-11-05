@@ -5,12 +5,12 @@
 /*                                                     +:+                    */
 /*   By: wkonings <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/01 20:48:00 by wkonings       #+#    #+#                */
-/*   Updated: 2019/12/20 09:17:11 by wkonings      ########   odam.nl         */
+/*   Created: 2019/04/01 20:48:00 by wkonings      #+#    #+#                 */
+/*   Updated: 2022/11/05 17:22:05 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
 char	*ft_strdup(const char *s1)
 {

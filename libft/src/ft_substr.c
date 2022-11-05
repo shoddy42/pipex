@@ -5,12 +5,12 @@
 /*                                                     +:+                    */
 /*   By: wkonings <wkonings@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/11/02 18:07:08 by wkonings       #+#    #+#                */
-/*   Updated: 2019/12/20 08:57:51 by wkonings      ########   odam.nl         */
+/*   Created: 2019/11/02 18:07:08 by wkonings      #+#    #+#                 */
+/*   Updated: 2022/11/05 17:22:05 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {

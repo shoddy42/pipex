@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/31 11:04:11 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/04 22:20:44 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 17:23:31 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 int		ft_atoi(const char *nb);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);

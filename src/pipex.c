@@ -6,13 +6,13 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/03 21:08:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/04 19:20:05 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 17:28:41 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	pipexec(char *cmd, char *envp[], t_ppx *pipex)
+int	pipexec(char *cmd, char *envp[], t_ppx *pipex)
 {
 	char	**args;
 	char	*path;
@@ -36,7 +36,7 @@ void	pipexec(char *cmd, char *envp[], t_ppx *pipex)
 	write(2, "pipex: ", 7);
 	write(2, cmd, ft_strlen(cmd));
 	write(2, ": command not found\n", 20);
-	exit(127);
+	return(127);
 }
 
 int	get_fd_in(int tunnel, t_ppx *pipex, int command_num)

@@ -5,12 +5,12 @@
 /*                                                     +:+                    */
 /*   By: wkonings <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/16 02:41:08 by wkonings       #+#    #+#                */
-/*   Updated: 2019/12/16 22:49:42 by wkonings      ########   odam.nl         */
+/*   Created: 2019/04/16 02:41:08 by wkonings      #+#    #+#                 */
+/*   Updated: 2022/11/05 17:22:05 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
 void	*ft_memchr(const void *s, int c, size_t n)
 {

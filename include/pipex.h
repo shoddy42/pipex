@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 20:13:59 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/04 22:10:44 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 17:19:22 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,20 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <sys/wait.h>
+# include "libft/libft.h"
 
 typedef struct s_ppx
 {
 	char	**path;
 	char	**envp;
+	pid_t	pid;
 	int		hd_tunnel[2];
 	int		old_read;
 	int		cmd_count;
-	pid_t	pid;
 	int		here_doc;
 	int		infile_fd;
 	int		outfile_fd;
+	int		cancel_cmd;
 }				t_ppx;
 
 typedef enum e_pipe
@@ -48,6 +50,12 @@ typedef enum e_error
 	P_ERROR,
 	WR_ERROR,
 }	t_error;
+
+typedef enum e_cancel
+{
+	TRUE,
+	FALSE,
+}	t_cancel;
 
 		/* pipex specific functions */
 char	*pipex_pathjoin(char const *path, char const *cmd);

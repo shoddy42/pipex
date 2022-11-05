@@ -6,11 +6,11 @@
 /*   By: wkonings <wkonings@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/02 21:22:56 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/02/24 15:12:26 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/05 17:22:05 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
 static size_t	word_len(char const *s, char c)
 {

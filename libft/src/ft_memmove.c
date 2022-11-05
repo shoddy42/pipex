@@ -5,12 +5,12 @@
 /*                                                     +:+                    */
 /*   By: wkonings <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/03 23:28:50 by wkonings       #+#    #+#                */
-/*   Updated: 2019/12/14 19:13:07 by wkonings      ########   odam.nl         */
+/*   Created: 2019/04/03 23:28:50 by wkonings      #+#    #+#                 */
+/*   Updated: 2022/11/05 17:22:05 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
 void	*ft_memmove(void *dst, const void *src, size_t n)
 {

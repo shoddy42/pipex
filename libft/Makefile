@@ -6,7 +6,7 @@
 #    By: wkonings <wkonings@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/11/04 22:17:35 by wkonings      #+#    #+#                  #
-#    Updated: 2022/11/04 22:21:40 by wkonings      ########   odam.nl          #
+#    Updated: 2022/11/05 17:24:44 by wkonings      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ FILES = tolower toupper isprint isascii isalnum isdigit isalpha atoi \
 		memchr memmove memccpy memcpy bzero memset calloc strdup \
 		substr strjoin strtrim split itoa strmapi putchar_fd \
 		putstr_fd putendl_fd putnbr_fd lstnew lstadd_front lstsize \
-		lstlast lstadd_back lstdelone lstclear lstiter lstmap \
+		lstlast lstadd_back lstdelone lstclear lstiter lstmap strcmp \
 
 SRCS		:=	$(addprefix $(SRC_DIR)/,$(FILES:%=ft_%.c))
 OBJS		:=	$(addprefix $(OBJS_DIR)/,$(notdir $(SRCS:%.c=%.o)))
