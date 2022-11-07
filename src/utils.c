@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/15 18:18:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/05 18:02:19 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/07 17:53:32 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	pipex_open(int ac, char **av, t_ppx *pipex)
 		if (pipex->outfile_fd < 0)
 		{
 			perror("pipex: outfile");
-			pipex->cancel_first = true;
+			pipex->cancel_final = true;
 		}
 	}
 }
@@ -79,8 +79,6 @@ int	split_path(char **envp, t_ppx *pipex)
 	i = 0;
 	while (ft_strncmp(envp[i], "PATH=", 5) != 0 && envp[i + 1])
 		i++;
-	// if (ft_strncmp(envp[i], "PATH=", 5) != 0)
-	// 	write(2, "No path!")
 	pipex->path = ft_split(envp[i] + 6, ':');
 	return (0);
 }

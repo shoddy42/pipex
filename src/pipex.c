@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/03 21:08:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/05 18:09:22 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/07 18:27:33 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,16 @@ int	pipexec(char *cmd, char *envp[], t_ppx *pipex)
 	int		i;
 
 	args = ft_split(cmd, ' ');
-	i = 0;
+	i = -1;
 	if (access(args[0], X_OK) == 0)
 		execve(args[0], args, envp);
-	while (pipex->path[i])
+	while (pipex->path[++i])
 	{
 		path = pipex_pathjoin(pipex->path[i], cmd);
 		if (access(path, X_OK) == 0)
-		{
-			execve(path, args, envp);
-			exit (1);
-		}
+			if (execve(path, args, envp) == -1)
+				exit (1);
 		free(path);
-		i++;
 	}
 	write(2, "pipex: ", 7);
 	write(2, cmd, ft_strlen(cmd));
@@ -55,17 +52,13 @@ int	get_fd_out(int tunnel, t_ppx *pipex, int command_num)
 	return (tunnel);
 }
 
-	// if (command_num == pipex->cmd_count)
-	// 	printf ("final cmd!\n");
-
-//todo: TESTING. REMOVING COMMENTS.
 int	forking(char *cmd, t_ppx *pipex, int command_num, int read_tunnel)
 {
 	int		tunnel[2];
 
 	if (command_num == 0 && pipex->cancel_first)
 		return (-1);
-	if (command_num == pipex->cmd_count && pipex->cancel_final)
+	if (command_num + 1 == pipex->cmd_count && pipex->cancel_final)
 		return (-1);
 	if (pipe(tunnel) < 0)
 		pipex_error("Creating pipe failed.\n", P_ERROR);
@@ -81,7 +74,6 @@ int	forking(char *cmd, t_ppx *pipex, int command_num, int read_tunnel)
 		dup2(pipex->fd_in, STDIN_FILENO);
 		pipexec(cmd, pipex->envp, pipex);
 	}
-	//removed else? should be fine? child always exits.
 	close(tunnel[WRITE]);
 	if (read_tunnel > 2)
 		close(read_tunnel);
@@ -99,10 +91,10 @@ int	main(int ac, char **av, char **envp)
 	pipex.envp = envp;
 	pipex.cancel_first = false;
 	pipex.cancel_final = false;
+	pipex.old_read = -1;
 	split_path(envp, &pipex);
 	pipex_open(ac, av, &pipex);
 	i = 0;
-	pipex.old_read = -1;
 	if (pipex.here_doc == 1)
 		i++;
 	while (i++ < pipex.cmd_count)
@@ -111,18 +103,3 @@ int	main(int ac, char **av, char **envp)
 		waitpid((pid_t)0, NULL, 0);
 	exit (0);
 }
-
-/*
-
-todo: testing
-
-test UNSET PATH, cmd execution
-cursed infile: cmd 2 should exe
-cursed outfile: cmd 1 should exe
-
-test what if cursed infile and outfile: do middle cmds exe?
-test what if file of name "ls", my guess is check if cmd[0] contains a / to confirm its a literal path.
-
-exit statuses?
-
-*/
