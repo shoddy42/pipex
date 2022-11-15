@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 20:13:59 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/15 13:42:19 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/15 15:05:01 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include <sys/wait.h>
 # include "libft/libft.h"
+# include <errno.h>
 
 typedef struct s_ppx
 {
@@ -33,7 +34,6 @@ typedef struct s_ppx
 	int		hd_tunnel[2];
 	int		here_doc;
 
-	int		prev_read;
 	int		infile_fd;
 	int		outfile_fd;
 
@@ -66,7 +66,8 @@ void	pipex_error(char *error_message, int mode);
 int		pipex_heredoc(char *av, t_ppx *pipex);
 void	pipex_open(int ac, char **av, t_ppx *pipex);
 int		split_path(char *env[], t_ppx *pipex);
-int		get_fd_in(int current_fd, t_ppx *pipex, int mode);
+int		get_fd_in(int tunnel, t_ppx *pipex, int command_num);
+int		get_fd_out(int tunnel, t_ppx *pipex, int command_num);
 
 		/* libft funtions */
 char	**ft_split(char const *s, char c);
