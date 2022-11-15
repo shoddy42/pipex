@@ -1,16 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   heredoc.c                                          :+:    :+:            */
+/*   redirects.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/04 15:49:50 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/04 19:20:01 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/15 13:39:00 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+int	get_fd_in(int tunnel, t_ppx *pipex, int command_num)
+{
+	if (command_num == 1 && pipex->here_doc == 1)
+		return (pipex->hd_tunnel[READ]);
+	if (command_num == 0)
+		return (pipex->infile_fd);
+	return (tunnel);
+}
+
+int	get_fd_out(int tunnel, t_ppx *pipex, int command_num)
+{
+	if (command_num == pipex->cmd_count - 1)
+		return (pipex->outfile_fd);
+	return (tunnel);
+}
 
 void	read_heredoc(char *av, t_ppx *pipex)
 {

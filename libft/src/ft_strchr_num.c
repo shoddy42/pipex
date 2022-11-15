@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_isalnum.c                                       :+:    :+:            */
+/*   ft_strchr_num.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: wkonings <marvin@codam.nl>                   +#+                     */
+/*   By: wkonings <root@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/04 04:42:57 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/15 09:07:41 by wkonings      ########   odam.nl         */
+/*   Created: 2022/11/09 10:23:30 by root          #+#    #+#                 */
+/*   Updated: 2022/11/15 13:35:14 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum(int c)
+#include "../libft.h"
+
+//temporary file, need to push the real one from codam.
+int	ft_strchr_num(const char *s, int c)
 {
-	if (c >= '0' && c <= '9')
-		return (1);
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	return (0);
+	int	i;
+
+	i = -1;
+	while (s[++i])
+		if (s[i] == (char)c)
+			return (i);
+	return (-1);
 }

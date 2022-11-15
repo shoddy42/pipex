@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/09 20:13:59 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/05 18:01:54 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/15 13:42:19 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_ppx
 	int		hd_tunnel[2];
 	int		here_doc;
 
+	int		prev_read;
 	int		infile_fd;
 	int		outfile_fd;
 

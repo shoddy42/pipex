@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/03 21:08:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/07 18:27:33 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/15 13:39:04 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +36,10 @@ int	pipexec(char *cmd, char *envp[], t_ppx *pipex)
 	exit(127);
 }
 
-int	get_fd_in(int tunnel, t_ppx *pipex, int command_num)
-{
-	if (command_num == 1 && pipex->here_doc == 1)
-		return (pipex->hd_tunnel[READ]);
-	if (command_num == 0)
-		return (pipex->infile_fd);
-	return (tunnel);
-}
-
-int	get_fd_out(int tunnel, t_ppx *pipex, int command_num)
-{
-	if (command_num == pipex->cmd_count - 1)
-		return (pipex->outfile_fd);
-	return (tunnel);
-}
-
 int	forking(char *cmd, t_ppx *pipex, int command_num, int read_tunnel)
 {
 	int		tunnel[2];
 
-	if (command_num == 0 && pipex->cancel_first)
-		return (-1);
-	if (command_num + 1 == pipex->cmd_count && pipex->cancel_final)
-		return (-1);
 	if (pipe(tunnel) < 0)
 		pipex_error("Creating pipe failed.\n", P_ERROR);
 	pipex->fd_in = get_fd_in(read_tunnel, pipex, command_num);
@@ -72,6 +52,10 @@ int	forking(char *cmd, t_ppx *pipex, int command_num, int read_tunnel)
 		close(tunnel[READ]);
 		dup2(pipex->fd_out, STDOUT_FILENO);
 		dup2(pipex->fd_in, STDIN_FILENO);
+		if (command_num == 0 && pipex->cancel_first)
+			exit (1);
+		if (command_num + 1 == pipex->cmd_count && pipex->cancel_final)
+			exit (1);
 		pipexec(cmd, pipex->envp, pipex);
 	}
 	close(tunnel[WRITE]);
