@@ -6,19 +6,21 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/15 18:18:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/15 15:45:22 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/15 16:40:02 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	pipex_error(char *error_message, int mode)
+void	pipex_error(char *error_message, int mode, bool terminate)
 {
+	write (STDERR_FILENO, "pipex: ", 8);
 	if (mode == WR_ERROR)
 		write (STDERR_FILENO, error_message, ft_strlen(error_message));
 	if (mode == P_ERROR)
 		perror (error_message);
-	exit(1);
+	if (terminate == true)
+		exit(1);
 }
 
 char	*pipex_pathjoin(char const *path, char const *cmd)
@@ -72,7 +74,7 @@ void	pipex_open(int ac, char **av, t_ppx *pipex)
 	}
 }
 
-int	split_path(char **envp, t_ppx *pipex)
+void	split_path(char **envp, t_ppx *pipex)
 {
 	int	i;
 
@@ -80,5 +82,4 @@ int	split_path(char **envp, t_ppx *pipex)
 	while (envp[++i])
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 			pipex->path = ft_split(envp[i] + 6, ':');
-	return (0);
 }

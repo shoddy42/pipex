@@ -6,7 +6,7 @@
 /*   By: wkonings <wkonings@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/03 21:08:54 by wkonings      #+#    #+#                 */
-/*   Updated: 2022/11/15 16:05:39 by wkonings      ########   odam.nl         */
+/*   Updated: 2022/11/15 16:39:56 by wkonings      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,10 @@ static bool	handle_path(char **args, char **envp)
 	int		i;
 
 	if (!args)
-		pipex_error("Splitting of arguments failed.", P_ERROR);
+		pipex_error("Splitting of arguments failed.", P_ERROR, true);
 	if (access(args[0], X_OK) == 0)
-	{
-		dprintf(2, "execing! [%s]\n", args[0]);
 		if (execve(args[0], args, envp) == -1)
 			exit (1);
-	}
 	i = -1;
 	while (args[0][++i])
 		if (args[0][i] == '/')
@@ -39,28 +36,20 @@ static int	pipexec(char *cmd, char **envp, t_ppx *pipex)
 
 	args = ft_split(cmd, ' ');
 	if (handle_path(args, envp))
-		pipex_error(args[0], P_ERROR);
+		pipex_error(args[0], P_ERROR, true);
 	i = -1;
 	while (pipex->path && pipex->path[++i])
 	{
 		path = pipex_pathjoin(pipex->path[i], cmd);
 		if (access(path, X_OK) == 0)
-		{
-			dprintf (2, "regu?: [%s]\n", path);
 			if (execve(path, args, envp) == -1)
 				exit (1);
-		}
 		free(path);
 	}
-	dprintf (2, "HERE!\n");
-	path = pipex_pathjoin("", cmd);
-	dprintf (2, "???: [%s]\n", path);
+	path = pipex_pathjoin(".", cmd);
 	if (access(path, X_OK) == 0)
-	{
-		dprintf (2, "last catch: [%s]\n", path);
 		if (execve(path, args, envp) == -1)
 			exit (1);
-	}
 	free(path);
 	write(2, "pipex: ", 7);
 	write(2, cmd, ft_strlen(cmd));
@@ -73,12 +62,12 @@ static void	forking(char *cmd, t_ppx *pipex, int command_num)
 	int	tunnel[2];
 
 	if (pipe(tunnel) < 0)
-		pipex_error("Creating pipe failed.\n", P_ERROR);
+		pipex_error("Creating pipe failed.\n", P_ERROR, true);
 	pipex->fd_in = get_fd_in(pipex->old_read, pipex, command_num);
 	pipex->fd_out = get_fd_out(tunnel[WRITE], pipex, command_num);
 	pipex->pid = fork();
 	if (pipex->pid < 0)
-		pipex_error("Creation of child process failed.\n", P_ERROR);
+		pipex_error("Creation of child process failed.\n", P_ERROR, true);
 	if (pipex->pid == CHILD)
 	{
 		close(tunnel[READ]);
@@ -96,21 +85,20 @@ static void	forking(char *cmd, t_ppx *pipex, int command_num)
 	pipex->old_read = tunnel[READ];
 }
 
-static bool	init_pipex(t_ppx *pipex, int ac, char **av, char **envp)
+static void	init_pipex(t_ppx *pipex, int ac, char **av, char **envp)
 {
 	if (ac < 5 || (ac < 6 && ft_strcmp("here_doc", av[1]) == 0))
-		pipex_error("Not enough arguments.\n", WR_ERROR);
+		pipex_error("Not enough arguments.\n", WR_ERROR, true);
 	ft_bzero(pipex, sizeof(t_ppx));
 	pipex->cmd_count = ac - 3;
 	pipex->envp = envp;
-	return (split_path(envp, pipex));
+	split_path(envp, pipex);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	int		i;
 	t_ppx	pipex;
-
 
 	init_pipex(&pipex, ac, av, envp);
 	pipex_open(ac, av, &pipex);
